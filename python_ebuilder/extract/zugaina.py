@@ -1,6 +1,6 @@
 import urllib.request
 from bs4 import BeautifulSoup
-from pymonad.Maybe import Nothing, Just
+from oslash.maybe import Nothing, Just
 
 
 def get_result(name_version):
@@ -35,11 +35,8 @@ def get_category(url_list):
 
 
 def get_dir(name_version):
-    folder = get_result(name_version) >> get_url >> get_category
-    if folder == Nothing:
-        return ""
-    else:
-        return folder.value
+    folder = get_result(name_version) | get_url | get_category
+    return folder.from_maybe(str)
 
 
 def main():
