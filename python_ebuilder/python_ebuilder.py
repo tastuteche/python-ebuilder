@@ -24,16 +24,20 @@ if __name__ == '__main__' and __package__ is None:
     import_parents(level=1)
 
 
-from .generate.ebuild import ConfigManager, render
+from .extract.pypi_page import get_data
+from .transform.pypi_ebuild import process_data
+from .generate.ebuild_file import render
+from oslash.util.fn import compose
 
 
 def main():
-    options = {"src_uri": "https://pypi.python.org/packages/source/qqqqqq"
-               ""
-               }
-    config = ConfigManager(options)
+    # data = get_data('howdoi', 'sss)
+    # options = process_data(data)
+    # print(options)
+    # render(options)
+    comp = compose(render, process_data, get_data)
 
-    render(config)
+    comp('howdoi', '1.1.9')
 
 
 if __name__ == '__main__':

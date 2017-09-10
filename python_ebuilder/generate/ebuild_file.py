@@ -1,6 +1,7 @@
 from jinja2 import Environment, PackageLoader
 import re
 
+
 EBUILD_TEMPLATE_PACKAGE = 'python_ebuilder'
 EBUILD_TEMPLATE = 'ebuild.jinja'
 
@@ -29,8 +30,9 @@ env.filters['replace_re'] = replace_re
 
 
 def render(options):
+    config = ConfigManager(options)
     template = env.get_template(EBUILD_TEMPLATE)
 
-    output = template.render(options=options)
+    output = template.render(options=config)
     output = output.replace('    ', '\t')
     print(output)

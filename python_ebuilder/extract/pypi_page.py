@@ -1,23 +1,25 @@
 import urllib.request
 from bs4 import BeautifulSoup
-from pymonad.List import List
+from oslash.list import List
 
 
 def get_result(name, version):
     theurl = "https://pypi.python.org/pypi/%s" % name
     thepage = urllib.request.urlopen(theurl)
     soup = BeautifulSoup(thepage, "lxml")
-    return List(soup)
+    return List.unit(soup)
 
 
 def get_index(soup):
     data = {}
     data["index"] = {}
     for div in soup("div", id="download-button"):
-        data["index"]['name_version'] = div.parent.find("h1").text
+        lst = div.parent.find("h1").text.split()
+        data["index"]['name_version'] = (lst[0], lst[1])
         data["index"]['description'] = div.parent.findNext('p').text
         break
-    return List(data)
+
+    return List.unit(data)
 
 
 def get_table(soup):
@@ -56,7 +58,7 @@ def get_table(soup):
                                   "size": file_size})
             entry.decompose()
         table.decompose()
-    return List(data)
+    return List.unit(data)
 
 
 def get_ul(soup):
@@ -96,7 +98,7 @@ def get_ul(soup):
                 continue
             entry.decompose()
         ul.decompose()
-    return List(data)
+    return List.unit(data)
 
 
 def merge_two_dicts(x, y):
@@ -111,9 +113,9 @@ from functools import reduce
 
 def get_data(name, version):
     soup = get_result(name, version)
-    data0 = soup >> get_index
-    data1 = soup >> get_table
-    data2 = soup >> get_ul
+    data0 = soup | get_index
+    data1 = soup | get_table
+    data2 = soup | get_ul
 
     data = data0 + data1 + data2
 
