@@ -9,11 +9,11 @@
 {%- endif %}
 
 EAPI="5"
-
+[[ ${PV} = *9999* ]] && GIT_ECLASS="git-r3" || GIT_ECLASS=""
 {# TODO(NBK): determine which version of python this will work with #}
 PYTHON_COMPAT={{ options.python_compat }}
 
-inherit {{ options.inherit|join(" ") }}
+inherit ${GIT_ECLASS} {{ options.inherit|join(" ") }}
 
 {% for value in my_pn %}
 MY_PN="{{ value }}"
@@ -27,12 +27,12 @@ MY_P="{{ my_p }}"
 
 DESCRIPTION="{{ options.description }}"
 HOMEPAGE="{{ options.homepage }}"
-{% if esvn_repo_uri %}
-ESVN_REPO_URI="{{ esvn_repo_uri }}"
-{% else %}
-{# TODO: SRC_URI="{{ src_uri|join(" ") }}" #}
-SRC_URI="{{ options.src_uri|replace_re("https?://pypi.python.org/packages/source/", "mirror://pypi/") }}"
-{% endif %}
+
+if [[ ${PV} != *9999* ]]; then
+	SRC_URI="{{ options.egit_repo_uri }}/tarball/v${PV} -> ${P}.tar.gz"
+else
+	EGIT_REPO_URI="{{ options.egit_repo_uri }}"
+fi
 
 LICENSE="{{ options.license }}"
 KEYWORDS="{{ options.gentoo_keywords }}"
@@ -41,12 +41,17 @@ IUSE="{{ use|join(" ") }}"
 
 {% if options.rdepend %}
 RDEPEND="{{ options.rdepend|list|sort|join("\n\t") }}"
+{% else %}
+RDEPEND="
+"
 {% endif %}
 {% if options.rdepend and options.rdepend == options.depend %}
-DEPEND="${RDEPEND}"
+DEPEND="${RDEPEND}
+"
 {% elif options.depend %}
 DEPEND="${RDEPEND}
-{{ options.depend|list|sort|join("\n\t") }}"
+{{ options.depend|list|sort|join("\n\t") }}
+"
 {% endif %}
 
 {% if s %}
@@ -64,4 +69,5 @@ DOCS={{ docs_dir }}
 EXAMPLES={{ examples_dir }}
 {% endif %}
 
+#{{ options.realname }}-9999.ebuild
 

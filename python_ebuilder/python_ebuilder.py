@@ -1,6 +1,7 @@
 import sys
 import importlib
 from pathlib import Path
+import click
 
 # https://gist.github.com/vaultah/d63cb4c86be2774377aa674b009f759a
 
@@ -28,19 +29,22 @@ from .extract.pypi_page import get_data
 from .extract.gentoo_host import add_host_info
 from .transform.pypi_ebuild import process_data
 from .transform.setup_py_ebuild import add_depend_info
-from .generate.ebuild_file import render
+from .generate.ebuild_file import render, render9999
 from oslash.util.fn import compose
 
 
-def main():
+@click.command()
+@click.argument('package_name')
+@click.option('--version', default="", help='package version')
+def main(package_name, version):
     # data = get_data('howdoi', 'sss)
     # options = process_data(data)
     # print(options)
     # render(options)
-    comp = compose(render, add_depend_info, add_host_info,
+    comp = compose(render9999, add_depend_info, add_host_info,
                    process_data, get_data)
 
-    comp('howdoi', '1.1.9')
+    comp(package_name, version)
 
 
 if __name__ == '__main__':

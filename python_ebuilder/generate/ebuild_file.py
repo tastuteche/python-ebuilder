@@ -4,6 +4,7 @@ import re
 
 EBUILD_TEMPLATE_PACKAGE = 'python_ebuilder'
 EBUILD_TEMPLATE = 'ebuild.jinja'
+EBUILD_TEMPLATE_9999 = 'ebuild9999.jinja'
 
 env = Environment(
     loader=PackageLoader(EBUILD_TEMPLATE_PACKAGE, 'templates'),
@@ -29,10 +30,18 @@ def replace_re(s, find, replace):
 env.filters['replace_re'] = replace_re
 
 
-def render(options):
+def _render(options, template_file):
     config = ConfigManager(options)
-    template = env.get_template(EBUILD_TEMPLATE)
+    template = env.get_template(template_file)
 
     output = template.render(options=config)
     output = output.replace('    ', '\t')
     print(output)
+
+
+def render(options):
+    return _render(options, EBUILD_TEMPLATE)
+
+
+def render9999(options):
+    return _render(options, EBUILD_TEMPLATE_9999)

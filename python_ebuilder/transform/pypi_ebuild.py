@@ -221,6 +221,10 @@ def process_data(data):
         ebuild_data["homepage"] = get_homepage(data)
         ebuild_data["license"] = get_pkg_license(data)
         ebuild_data["src_uri"] = get_src_uri(data)
+        if 'github' in ebuild_data["homepage"]:
+            ebuild_data["egit_repo_uri"] = ebuild_data["homepage"]
+        else:
+            ebuild_data["egit_repo_uri"] = "please_set_it_by_hand"
         ebuild_data["md5"] = get_md5(data)
         ebuild_data["python_compat"] = get_python_compat(data)
 

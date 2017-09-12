@@ -9,9 +9,12 @@ def _get_setup_args(path):
     with open(path, 'rU') as file:
         t = compile(file.read(), path, 'exec', ast.PyCF_ONLY_AST)
         for node in (n for n in t.body if isinstance(n, ast.Expr)):
-            if isinstance(node.value, ast.Call) and node.value.func.id == 'setup':
-                rtn = List.from_iterable(node.value.keywords)
-                break
+            if isinstance(node.value, ast.Call):
+                if hasattr(node.value.func, 'id') and node.value.func.id == 'setup':
+                    rtn = List.from_iterable(node.value.keywords)
+                    break
+                else:
+                    print(dir(node.value.func), node.value.func.value)
 
     return rtn
 
