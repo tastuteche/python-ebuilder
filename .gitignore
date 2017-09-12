@@ -32,3 +32,5 @@ tst
 
 #layman
 layman
+python_ebuilder/portage/
+.ropeproject

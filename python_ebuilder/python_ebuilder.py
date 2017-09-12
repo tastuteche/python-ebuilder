@@ -44,7 +44,16 @@ def main(package_name, version):
     comp = compose(render9999, add_depend_info, add_host_info,
                    process_data, get_data)
 
-    comp(package_name, version)
+    result = comp(package_name, version)
+
+    import os
+    ebuild_dir = "portage/dev-python/%s" % package_name
+    if not os.path.exists(ebuild_dir):
+        os.makedirs(ebuild_dir)
+    ebuild_file = ebuild_dir + "%s-9999.ebuild" % package_name
+    with open(ebuild_file, 'w') as f:
+        f.write(result)
+    print(ebuild_file)
 
 
 if __name__ == '__main__':

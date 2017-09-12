@@ -36,7 +36,7 @@ def _render(options, template_file):
 
     output = template.render(options=config)
     output = output.replace('    ', '\t')
-    print(output)
+    return output
 
 
 def render(options):
