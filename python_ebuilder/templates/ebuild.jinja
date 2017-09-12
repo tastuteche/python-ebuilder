@@ -39,13 +39,13 @@ KEYWORDS="{{ options.gentoo_keywords }}"
 SLOT="{{ slot }}"
 IUSE="{{ use|join(" ") }}"
 
-{% if depend %}
-DEPEND="{{ depend|list|sort|join("\n\t") }}"
+{% if options.depend %}
+DEPEND="{{ options.depend|list|sort|join("\n\t") }}"
 {% endif %}
-{% if depend and depend == rdepend %}
+{% if options.depend and options.depend == options.rdepend %}
 RDEPEND="${DEPEND}"
-{% elif rdepend %}
-RDEPEND="{{ rdepend|list|sort|join("\n\t") }}"
+{% elif options.rdepend %}
+RDEPEND="{{ options.rdepend|list|sort|join("\n\t") }}"
 {% endif %}
 
 {% if s %}

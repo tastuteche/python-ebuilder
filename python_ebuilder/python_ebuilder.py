@@ -27,6 +27,7 @@ if __name__ == '__main__' and __package__ is None:
 from .extract.pypi_page import get_data
 from .extract.gentoo_host import add_host_info
 from .transform.pypi_ebuild import process_data
+from .transform.setup_py_ebuild import add_depend_info
 from .generate.ebuild_file import render
 from oslash.util.fn import compose
 
@@ -36,7 +37,8 @@ def main():
     # options = process_data(data)
     # print(options)
     # render(options)
-    comp = compose(render, add_host_info, process_data, get_data)
+    comp = compose(render, add_depend_info, add_host_info,
+                   process_data, get_data)
 
     comp('howdoi', '1.1.9')
 
