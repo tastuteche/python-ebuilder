@@ -1,5 +1,5 @@
 #from ..extract.setup_py_ast import get_data
-from ..extract.setup_py_exec import import_and_extract
+from ..extract.setup_py_import import import_and_extract
 from ..download.python_archive import get_setup_py
 import os
 import re
