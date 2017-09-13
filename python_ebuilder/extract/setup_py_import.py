@@ -3,18 +3,25 @@ import mock
 import setuptools
 import tempfile
 import os
+import distutils.core
 
 
 def import_and_extract(parent_dir):
     sys.path.insert(0, parent_dir)
     with tempfile.NamedTemporaryFile(prefix="setup_temp_", mode='w', dir=parent_dir, suffix='.py') as temp_fh:
         with open(os.path.join(parent_dir, "setup.py"), 'r') as setup_fh:
-            temp_fh.write(setup_fh.read())
+            content = setup_fh.read()
+            temp_fh.write(content)
             temp_fh.flush()
         try:
-            with mock.patch.object(setuptools, 'setup') as mock_setup:
-                module_name = os.path.basename(temp_fh.name).split(".")[0]
-                setup_py_module = __import__(module_name)
+            if 'setuptools' in content:
+                with mock.patch.object(setuptools, 'setup') as mock_setup:
+                    module_name = os.path.basename(temp_fh.name).split(".")[0]
+                    setup_py_module = __import__(module_name)
+            elif 'distutils' in content:
+                with mock.patch.object(distutils.core, 'setup') as mock_setup:
+                    module_name = os.path.basename(temp_fh.name).split(".")[0]
+                    setup_py_module = __import__(module_name)
         finally:
             # need to blow away the pyc
             try:

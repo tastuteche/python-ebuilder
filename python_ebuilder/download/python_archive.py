@@ -3,6 +3,7 @@ from tempfile import NamedTemporaryFile, mkdtemp
 import patoolib
 import shutil
 from contextlib import contextmanager
+import os
 
 
 @contextmanager
@@ -11,19 +12,19 @@ def get_setup_py(zipurl):
         tfile.write(zipresp.read())
         tfile.seek(0)
         tmpdir = mkdtemp()
+        previousDir = os.getcwd()
         try:
             patoolib.extract_archive(tfile.name, outdir=tmpdir)
 
-            import os
             for root, dirs, files in os.walk(tmpdir):
                 for file in files:
                     if file == 'setup.py':
                         fullPath = os.path.join(root, file)
-                        previousDir = os.getcwd()
                         os.chdir(root)
                         yield fullPath
-                        os.chdir(previousDir)
+
         finally:
+            os.chdir(previousDir)
             if os.path.exists(tmpdir):
                 shutil.rmtree(tmpdir)
 

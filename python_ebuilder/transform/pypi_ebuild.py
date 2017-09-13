@@ -221,7 +221,7 @@ def process_data(data):
         ebuild_data["homepage"] = get_homepage(data)
         ebuild_data["license"] = get_pkg_license(data)
         ebuild_data["src_uri"] = get_src_uri(data)
-        if 'github' in ebuild_data["homepage"]:
+        if 'github' in ebuild_data["homepage"] or 'bitbucket':
             ebuild_data["egit_repo_uri"] = ebuild_data["homepage"]
         else:
             ebuild_data["egit_repo_uri"] = "please_set_it_by_hand"
