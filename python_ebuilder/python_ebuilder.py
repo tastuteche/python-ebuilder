@@ -50,7 +50,7 @@ def main(package_name, version):
     ebuild_dir = "portage/dev-python/%s" % package_name
     if not os.path.exists(ebuild_dir):
         os.makedirs(ebuild_dir)
-    ebuild_file = ebuild_dir + "%s-9999.ebuild" % package_name
+    ebuild_file = ebuild_dir + "/%s-9999.ebuild" % package_name
     with open(ebuild_file, 'w') as f:
         f.write(result)
     print(ebuild_file)

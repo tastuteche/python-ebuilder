@@ -1,76 +1,82 @@
-#!/usr/bin/env python
+import sys
+import codecs
+import setuptools
 
-from setuptools import setup, find_packages
-import howdoi
-import os
-
-
-def extra_dependencies():
-    import sys
-    ret = []
-    if sys.version_info < (2, 7):
-        ret.append('argparse')
-    return ret
+from version import __version__ as version
 
 
-def read(*names):
-    values = dict()
-    extensions = ['.txt', '.rst']
-    for name in names:
-        value = ''
-        for extension in extensions:
-            filename = name + extension
-            if os.path.isfile(filename):
-                value = open(name + extension).read()
-                break
-        values[name] = value
-    return values
+install_requires = [
+    'beautifulsoup4',
+    'decorator',
+    'kitchen',
+    'requests >=2.4.0',  # https://github.com/michael-lazar/rtv/issues/325
+    'six',
+]
 
-long_description = """
-%(README)s
+tests_require = [
+    'coveralls',
+    'pytest',
+    'coverage',
+    'mock',
+    'pylint',
+    'vcrpy',
+]
 
-News
-====
+extras_require = {
+    'test': tests_require
+}
 
-%(CHANGES)s
+# https://hynek.me/articles/conditional-python-dependencies/
+if int(setuptools.__version__.split(".", 1)[0]) < 18:
+    assert "bdist_wheel" not in sys.argv
+    if sys.version_info[0:2] < (3, 6):
+        install_requires.append("mailcap-fix")
+else:
+    # Building the bdist_wheel with conditional environment dependencies
+    # requires setuptools version > 18. For older setuptools versions this
+    # will raise an error.
+    extras_require.update({":python_version<'3.6'": ["mailcap-fix"]})
 
-""" % read('README', 'CHANGES')
 
-setup(
-    name='howdoi',
-    version=howdoi.__version__,
-    description='Instant coding answers via the command line',
-    long_description=long_description,
-    classifiers=[
-        "Development Status :: 5 - Production/Stable",
-        "Environment :: Console",
-        "Intended Audience :: Developers",
-        "Programming Language :: Python :: 2",
-        "Programming Language :: Python :: 2.6",
-        "Programming Language :: Python :: 2.7",
-        "Programming Language :: Python :: 3",
-        "Programming Language :: Python :: 3.2",
-        "Programming Language :: Python :: 3.3",
-        "Programming Language :: Python :: 3.4",
-        "Topic :: Documentation",
-    ],
-    keywords='howdoi help console command line answer',
-    author='Benjamin Gleitzman',
-    author_email='gleitz@mit.edu',
-    maintainer='Benjamin Gleitzman',
-    maintainer_email='gleitz@mit.edu',
-    url='https://github.com/gleitz/howdoi',
+def long_description():
+    with codecs.open('README.md', encoding='utf8') as f:
+        return f.read()
+
+
+setuptools.setup(
+    name='rtv',
+    version=version,
+    description='A simple terminal viewer for Reddit (Reddit Terminal Viewer)',
+    long_description=long_description(),
+    url='https://github.com/michael-lazar/rtv',
+    author='Michael Lazar',
+    author_email='lazar.michael22@gmail.com',
     license='MIT',
-    packages=find_packages(),
-    entry_points={
-        'console_scripts': [
-            'howdoi = howdoi.howdoi:command_line_runner',
-        ]
+    keywords='reddit terminal praw curses',
+    packages=[
+        'rtv',
+        'rtv.packages',
+        'rtv.packages.praw'
+    ],
+    package_data={
+        'rtv': ['templates/*'],
+        'rtv.packages.praw': ['praw.ini']
     },
-    install_requires=[
-        'pyquery',
-        'pygments',
-        'requests',
-        'requests-cache'
-    ] + extra_dependencies(),
+    data_files=[("share/man/man1", ["rtv.1"])],
+    install_requires=install_requires,
+    tests_require=tests_require,
+    extras_require=extras_require,
+    entry_points={'console_scripts': ['rtv=rtv.__main__:main']},
+    classifiers=[
+        'Intended Audience :: End Users/Desktop',
+        'Environment :: Console :: Curses',
+        'Operating System :: MacOS :: MacOS X',
+        'Operating System :: POSIX',
+        'Natural Language :: English',
+        'Programming Language :: Python :: 2.7',
+        'Programming Language :: Python :: 3.5',
+        'Topic :: Terminals',
+        'Topic :: Internet :: WWW/HTTP :: Dynamic Content :: Message Boards',
+        'Topic :: Internet :: WWW/HTTP :: Dynamic Content :: News/Diary',
+        ],
 )

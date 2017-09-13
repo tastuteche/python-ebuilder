@@ -19,7 +19,10 @@ def get_setup_py(zipurl):
                 for file in files:
                     if file == 'setup.py':
                         fullPath = os.path.join(root, file)
+                        previousDir = os.getcwd()
+                        os.chdir(root)
                         yield fullPath
+                        os.chdir(previousDir)
         finally:
             if os.path.exists(tmpdir):
                 shutil.rmtree(tmpdir)
