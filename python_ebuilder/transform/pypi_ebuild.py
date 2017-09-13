@@ -212,7 +212,7 @@ def process_data(data):
         ebuild_data = {}
         ebuild_data["realname"] = package
         ebuild_data["realversion"] = version
-        #filtered_package, filtered_version
+        # filtered_package, filtered_version
 
         description = get_description(data)
         ebuild_data["description"] = description
@@ -221,10 +221,20 @@ def process_data(data):
         ebuild_data["homepage"] = get_homepage(data)
         ebuild_data["license"] = get_pkg_license(data)
         ebuild_data["src_uri"] = get_src_uri(data)
-        if 'github' in ebuild_data["homepage"] or 'bitbucket':
+
+        if 'github' in ebuild_data["homepage"]:
             ebuild_data["egit_repo_uri"] = ebuild_data["homepage"]
+            ebuild_data["egit_inherit"] = 'git-r3'
+            ebuild_data["egit_repo"] = 'EGIT_REPO_URI'
+
+        elif 'bitbucket' in ebuild_data["homepage"]:
+            ebuild_data["egit_repo_uri"] = ebuild_data["homepage"]
+            ebuild_data["egit_inherit"] = 'mercurial'
+            ebuild_data["egit_repo"] = 'EHG_REPO_URI'
+            # SRC_URI="mirror://pypi/${PN:0:1}/${PN}/${P}.tar.gz"
         else:
             ebuild_data["egit_repo_uri"] = "please_set_it_by_hand"
+
         ebuild_data["md5"] = get_md5(data)
         ebuild_data["python_compat"] = get_python_compat(data)
 

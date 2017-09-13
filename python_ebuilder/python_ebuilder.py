@@ -3,6 +3,12 @@ import importlib
 from pathlib import Path
 import click
 
+__author__ = 'tastu teche <tastuteche@yahoo.com>'
+__description__ = 'Ebuild file producer for python  modules.'
+__license__ = 'GNU General Public License v3 or later (GPLv3+)'
+__version__ = '0.0.1'
+
+
 # https://gist.github.com/vaultah/d63cb4c86be2774377aa674b009f759a
 
 

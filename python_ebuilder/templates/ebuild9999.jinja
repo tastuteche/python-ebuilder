@@ -9,7 +9,7 @@
 {%- endif %}
 
 EAPI="5"
-[[ ${PV} = *9999* ]] && GIT_ECLASS="git-r3" || GIT_ECLASS=""
+[[ ${PV} = *9999* ]] && GIT_ECLASS="{{ options.egit_inherit }}" || GIT_ECLASS=""
 {# TODO(NBK): determine which version of python this will work with #}
 PYTHON_COMPAT={{ options.python_compat }}
 
@@ -31,7 +31,7 @@ HOMEPAGE="{{ options.homepage }}"
 if [[ ${PV} != *9999* ]]; then
 	SRC_URI="{{ options.egit_repo_uri }}/tarball/v${PV} -> ${P}.tar.gz"
 else
-	EGIT_REPO_URI="{{ options.egit_repo_uri }}"
+	{{ options.egit_repo }}="{{ options.egit_repo_uri }}"
 fi
 
 LICENSE="{{ options.license }}"
