@@ -1,6 +1,7 @@
 #from ..extract.setup_py_ast import get_data
 from ..extract.setup_py_import import import_and_extract
 from ..download.python_archive import get_setup_py
+from ..transform.gentoo_pkg import query_gentoo_pkg
 import os
 import re
 
@@ -18,8 +19,8 @@ def add_depend_info(options):
             dic = import_and_extract(thedir)
             if 'install_requires' in dic:
                 options['rdepend'] = map(
-                    lambda str: 'dev-python/' + _filter(str) + '[${PYTHON_USEDEP}]', dic['install_requires'])
-            options['depend'] = ['dev-python/setuptools[${PYTHON_USEDEP}]']
+                    lambda str: query_gentoo_pkg(_filter(str)) + '[${PYTHON_USEDEP}]', dic['install_requires'])
+                options['depend'] = ['dev-python/setuptools[${PYTHON_USEDEP}]']
             if 'license' in dic:
                 options['license'] = dic['license']
     return options
