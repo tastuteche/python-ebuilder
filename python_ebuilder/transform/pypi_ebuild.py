@@ -182,6 +182,9 @@ def get_src_uri(data):
         else:
             source_uri = files_src_uri
 
+    if "index" in pkg_data and "download_url" in pkg_data["index"]:
+        source_uri = pkg_data["index"]["download_url"]
+
     return source_uri
 
 

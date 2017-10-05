@@ -17,6 +17,7 @@ def get_index(soup):
         lst = div.parent.find("h1").text.split()
         data["index"]['name_version'] = (lst[0], lst[1])
         data["index"]['description'] = div.parent.findNext('p').text
+        data["index"]['download_url'] = div.find('a')["href"]
         break
 
     return List.unit(data)
