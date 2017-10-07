@@ -27,7 +27,7 @@ def get_table(soup):
     data = {}
     data["files"] = []
     for table in soup("table", class_="list")[-1:]:
-        if not "File" in table("th")[0].string:
+        if "File" not in table("th")[0].string:
             continue
 
         for entry in table("tr")[1:-1]:

@@ -8,6 +8,7 @@ import os
 
 @contextmanager
 def get_setup_py(zipurl):
+    print("setup_url", zipurl)
     with urlopen(zipurl) as zipresp, NamedTemporaryFile() as tfile:
         tfile.write(zipresp.read())
         tfile.seek(0)

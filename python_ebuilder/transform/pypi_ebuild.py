@@ -159,6 +159,16 @@ def get_filtered_version(version):
     return filtered_version
 
 
+def _is_valid_url(url):
+    # https://pypi.python.org/pypi/gensim#downloads
+    if url.endswith('#downloads'):
+        return False
+    if ".tar.gz" in url or ".zip" in url:
+        return True
+    else:
+        return False
+
+
 def get_src_uri(data):
     files_src_uri = ""
     source_uri = ""
@@ -177,13 +187,15 @@ def get_src_uri(data):
             if "Download URL:" in info:
                 download_url = info["Download URL:"]
 
-        if download_url:
+        if _is_valid_url(download_url):
             source_uri = download_url  # todo: find how to define src_uri
         else:
             source_uri = files_src_uri
 
     if "index" in pkg_data and "download_url" in pkg_data["index"]:
-        source_uri = pkg_data["index"]["download_url"]
+        url = pkg_data["index"]["download_url"]
+        if _is_valid_url(url):
+            source_uri = url
 
     return source_uri
 
@@ -237,6 +249,8 @@ def process_data(data):
             # SRC_URI="mirror://pypi/${PN:0:1}/${PN}/${P}.tar.gz"
         else:
             ebuild_data["egit_repo_uri"] = "please_set_it_by_hand"
+            ebuild_data["egit_inherit"] = 'git-r3'
+            ebuild_data["egit_repo"] = 'EGIT_REPO_URI'
 
         ebuild_data["md5"] = get_md5(data)
         ebuild_data["python_compat"] = get_python_compat(data)

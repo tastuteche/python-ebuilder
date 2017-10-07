@@ -3,6 +3,7 @@ gentoo_pkg = {
     "pocketsphinx": "app-accessibility/pocketsphinx",
     "SpeechRecognition": "app-accessibility/speechrecognition",
     "EbookLib": "dev-python/ebooklib",
+    "scipy": "sci-libs/scipy",
 }
 
 
