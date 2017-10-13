@@ -4,6 +4,15 @@ import setuptools
 import tempfile
 import os
 import distutils.core
+import re
+
+
+def is_setuptools(content):
+    return len(re.findall('from\s+setuptools\s+import.*(\s|,)setup', content)) > 0
+
+
+def is_distutils(content):
+    return len(re.findall('from\s+distutils\.core\s+import.*(\s|,)setup', content)) > 0
 
 
 def import_and_extract(parent_dir):
@@ -14,11 +23,11 @@ def import_and_extract(parent_dir):
             temp_fh.write(content)
             temp_fh.flush()
         try:
-            if 'setuptools' in content:
+            if is_setuptools(content):
                 with mock.patch.object(setuptools, 'setup') as mock_setup:
                     module_name = os.path.basename(temp_fh.name).split(".")[0]
                     setup_py_module = __import__(module_name)
-            elif 'distutils' in content:
+            elif is_distutils(content):
                 with mock.patch.object(distutils.core, 'setup') as mock_setup:
                     module_name = os.path.basename(temp_fh.name).split(".")[0]
                     setup_py_module = __import__(module_name)
