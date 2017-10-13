@@ -19,10 +19,11 @@ def get_setup_py(zipurl):
 
             for root, dirs, files in os.walk(tmpdir):
                 for file in files:
-                    if file == 'setup.py':
+                    if file == 'setup.py' and (os.path.dirname(root) == tmpdir or root == tmpdir):
                         fullPath = os.path.join(root, file)
                         os.chdir(root)
                         yield fullPath
+                        break
 
         finally:
             os.chdir(previousDir)
