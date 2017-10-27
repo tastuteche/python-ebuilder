@@ -47,6 +47,7 @@ def main(package_name, version):
     # options = process_data(data)
     # print(options)
     # render(options)
+    print(package_name, version)
     comp = compose(render9999, add_depend_info, add_host_info,
                    process_data, get_data)
 

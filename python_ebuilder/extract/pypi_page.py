@@ -5,6 +5,9 @@ from oslash.list import List
 
 def get_result(name, version):
     theurl = "https://pypi.python.org/pypi/%s" % name
+    if version != None and version.strip() != "":
+        theurl = theurl + "/" + version
+    print(theurl)
     thepage = urllib.request.urlopen(theurl)
     soup = BeautifulSoup(thepage, "lxml")
     return List.unit(soup)
