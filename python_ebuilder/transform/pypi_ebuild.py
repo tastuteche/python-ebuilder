@@ -62,7 +62,7 @@ def get_python_compat(pkg_data):
             if entry == '2':
                 py_versions.extend(['2_7'])
             elif entry == '3':
-                py_versions.extend(['3_3', '3_4', '3_5'])
+                py_versions.extend(['3_3', '3_4', '3_5', '3_6'])
             elif entry == '2.6':
                 py_versions.extend(['2_7'])
             elif entry == '2.7':
@@ -75,9 +75,11 @@ def get_python_compat(pkg_data):
                 py_versions.extend(['3_4'])
             elif entry == '3.5':
                 py_versions.extend(['3_5'])
+            elif entry == '3.6':
+                py_versions.extend(['3_6'])
 
     if not py_versions:
-        py_versions = ['2_7', '3_3', '3_4', '3_5']
+        py_versions = ['2_7', '3_3', '3_4', '3_5', '3_6']
     py_versions = sorted(list(set(py_versions)))
     if len(py_versions) == 1:
         python_compat = '( python' + py_versions[0] + ' )'
