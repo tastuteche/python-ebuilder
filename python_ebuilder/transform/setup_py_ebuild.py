@@ -8,7 +8,8 @@ import re
 
 def _filter(s):
     '''requests >=2.4.0'''
-    return re.sub(r'[ ]?[>=<]+[ ]*[0-9.]+$', r'', s)
+    ''''numpy >=1.9.0, <2.0.0'''
+    return re.sub(r'[ ]?[>=<]+[ ]*[0-9.]+([ ]*,[ ]*[>=<]+[ ]*[0-9.]+)?$', r'', s)
 
 
 def add_depend_info(options):
