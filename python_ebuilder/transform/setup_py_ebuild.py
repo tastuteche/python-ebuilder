@@ -19,8 +19,11 @@ def add_depend_info(options):
             #dic = get_data(path)
             dic = import_and_extract(thedir)
             if 'install_requires' in dic:
+                print('install_requires', dic['install_requires'])
+                install_requires = filter(
+                    lambda x: x != None and x.strip() != '', dic['install_requires'])
                 options['rdepend'] = map(
-                    lambda str: query_gentoo_pkg(_filter(str)) + '[${PYTHON_USEDEP}]', dic['install_requires'])
+                    lambda str: query_gentoo_pkg(_filter(str)) + '[${PYTHON_USEDEP}]', install_requires)
                 options['depend'] = ['dev-python/setuptools[${PYTHON_USEDEP}]']
             if 'license' in dic:
                 options['license'] = dic['license']
