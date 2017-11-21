@@ -35,3 +35,4 @@ layman
 python_ebuilder/portage/
 .ropeproject
 python_ebuilder/.#python_ebuilder.py
+python_ebuilder/Downloads/
