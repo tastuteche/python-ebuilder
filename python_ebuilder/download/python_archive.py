@@ -9,7 +9,22 @@ import os
 @contextmanager
 def get_setup_py(zipurl):
     print("setup_url", zipurl)
-    with urlopen(zipurl) as zipresp, NamedTemporaryFile() as tfile:
+    file_name = os.path.join("Downloads", zipurl.split('/')[-1])
+    if os.path.exists(file_name):
+        if os.path.getsize(file_name) == 0:
+            print("size 0,removing...")
+            os.remove(file_name)
+        else:
+            print("already in Downloads")
+    if os.path.exists(file_name):
+        pass
+    else:
+        print('downloading...')
+        with urlopen(zipurl) as zipresp:
+            with open(file_name, 'wb') as f:
+                f.write(zipresp.read())
+
+    with open(file_name, 'rb') as zipresp, NamedTemporaryFile() as tfile:
         tfile.write(zipresp.read())
         tfile.seek(0)
         tmpdir = mkdtemp()
@@ -18,12 +33,22 @@ def get_setup_py(zipurl):
             patoolib.extract_archive(tfile.name, outdir=tmpdir)
 
             for root, dirs, files in os.walk(tmpdir):
-                for file in files:
-                    if file == 'setup.py' and (os.path.dirname(root) == tmpdir or root == tmpdir):
-                        fullPath = os.path.join(root, file)
-                        os.chdir(root)
-                        yield fullPath
-                        break
+                if file_name.endswith('.whl'):
+                    for file in files:
+                        # and (os.path.dirname(root) == tmpdir or root == tmpdir)
+                        if file == 'metadata.json':
+                            fullPath = os.path.join(root, file)
+                            os.chdir(root)
+                            yield fullPath
+                            break
+
+                else:
+                    for file in files:
+                        if file == 'setup.py' and (os.path.dirname(root) == tmpdir or root == tmpdir):
+                            fullPath = os.path.join(root, file)
+                            os.chdir(root)
+                            yield fullPath
+                            break
 
         finally:
             os.chdir(previousDir)

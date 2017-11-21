@@ -165,7 +165,7 @@ def _is_valid_url(url):
     # https://pypi.python.org/pypi/gensim#downloads
     if url.endswith('#downloads'):
         return False
-    if ".tar.gz" in url or ".zip" in url:
+    if ".tar.gz" in url or ".zip" in url or ".whl":
         return True
     else:
         return False
