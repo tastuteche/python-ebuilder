@@ -36,7 +36,8 @@ def get_setup_py(zipurl):
                 if file_name.endswith('.whl'):
                     for file in files:
                         # and (os.path.dirname(root) == tmpdir or root == tmpdir)
-                        if file == 'metadata.json':
+                        if file == 'metadata.json' and (os.path.dirname(root) == tmpdir):
+                            print(root, tmpdir)
                             fullPath = os.path.join(root, file)
                             os.chdir(root)
                             yield fullPath
