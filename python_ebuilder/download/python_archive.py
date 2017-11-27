@@ -8,6 +8,7 @@ import os
 
 @contextmanager
 def get_setup_py(zipurl):
+    # todo:zipurl is blank
     print("setup_url", zipurl)
     file_name = os.path.join("Downloads", zipurl.split('/')[-1])
     if os.path.exists(file_name):

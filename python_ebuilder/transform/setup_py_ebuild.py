@@ -25,6 +25,8 @@ def add_depend_info(options):
             else:
                 thedir = os.path.dirname(path)
                 #dic = get_data(path)
+                # gfortran: error: ./glmnet_py/GLMnet.f: No such file or directory
+                # No such file or directory: 'README.md'
                 dic = import_and_extract(thedir)
             if 'install_requires' in dic:
                 print('install_requires', dic['install_requires'])
