@@ -165,7 +165,7 @@ def _is_valid_url(url):
     # https://pypi.python.org/pypi/gensim#downloads
     if url.endswith('#downloads'):
         return False
-    if ".tar.gz" in url or ".zip" in url or ".whl":
+    if ".tar.gz" in url or ".zip" in url or ".whl" in url:
         return True
     else:
         return False
@@ -180,6 +180,7 @@ def get_src_uri(data):
         for file_entry in pkg_data["files"]:
             if file_entry["type"] == "\n    Source\n  ":
                 files_src_uri = file_entry["url"]
+                print('files_src_uri:', files_src_uri)
                 break
 
     if "info" in pkg_data:
@@ -191,6 +192,7 @@ def get_src_uri(data):
 
         if _is_valid_url(download_url):
             source_uri = download_url  # todo: find how to define src_uri
+            print('info Download URL:', source_uri, '|')
         else:
             source_uri = files_src_uri
 
@@ -198,6 +200,7 @@ def get_src_uri(data):
         url = pkg_data["index"]["download_url"]
         if _is_valid_url(url):
             source_uri = url
+            print('index download_url:', source_uri)
 
     return source_uri
 
