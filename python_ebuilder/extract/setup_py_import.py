@@ -20,15 +20,17 @@ def import_and_extract(parent_dir):
     with tempfile.NamedTemporaryFile(prefix="setup_temp_", mode='w', dir=parent_dir, suffix='.py') as temp_fh:
         with open(os.path.join(parent_dir, "setup.py"), 'r') as setup_fh:
             content = setup_fh.read()
-            temp_fh.write(content)
+            temp_fh.write('\n\n'.join(["__name__ = '__main__'", content]))
             temp_fh.flush()
         try:
             if is_setuptools(content):
                 with mock.patch.object(setuptools, 'setup') as mock_setup:
+                    print('is_setuptools')
                     module_name = os.path.basename(temp_fh.name).split(".")[0]
                     setup_py_module = __import__(module_name)
             elif is_distutils(content):
                 with mock.patch.object(distutils.core, 'setup') as mock_setup:
+                    print('is_distutils')
                     module_name = os.path.basename(temp_fh.name).split(".")[0]
                     setup_py_module = __import__(module_name)
         finally:
