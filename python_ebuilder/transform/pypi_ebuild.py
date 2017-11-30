@@ -242,7 +242,8 @@ def process_data(data):
         ebuild_data["license"] = get_pkg_license(data)
         ebuild_data["src_uri"] = get_src_uri(data)
 
-        if 'github' in ebuild_data["homepage"]:
+        # https://jiffyclub.github.io/palettable/
+        if 'github.com' in ebuild_data["homepage"]:
             ebuild_data["egit_repo_uri"] = ebuild_data["homepage"]
             ebuild_data["egit_inherit"] = 'git-r3'
             ebuild_data["egit_repo"] = 'EGIT_REPO_URI'
