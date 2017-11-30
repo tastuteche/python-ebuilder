@@ -4,6 +4,8 @@ gentoo_pkg = {
     "SpeechRecognition": "app-accessibility/speechrecognition",
     "EbookLib": "dev-python/ebooklib",
     "scipy": "sci-libs/scipy",
+    "scikit-learn": "sci-libs/scikits_learn",
+
 }
 
 
